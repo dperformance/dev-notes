@@ -1,0 +1,26 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: devnotes
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  datasource:
+    driver-class-name: org.h2.Driver  # H2 Database
+    url: jdbc:h2:mem:test
+    username: root
+    password:
+
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+
+decorator.datasource.p6spy.enable-logging: true     # false : Disable p6spy
+
