@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -20,11 +21,28 @@ public class SecurityConfig {
                  * 위에서 정의한 매치에 해당하지 않은 모든 요청을 의미하며 이 요청에 대해서는 인증된 사용자만 접근이 가능하다.
                  */
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login").permitAll()
+                        .requestMatchers("/", "/login", "/loginProc").permitAll()
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 );
+
+
+        http
+                /**
+                 * 사용자가 인증이 필요한 URL 에 접근할 때 인증되지 않은 경우, Security 는 /login URL 로 리다이렉트시킨다.
+                 * loginProcessingUrl("loginProc)
+                 *   - login 요청을 할때 사용할 URL 을 설정한다.
+                 *   - Security 는 이 URL을 통해 로그인 요청을 처리하고, 인증을 수행한다.
+                 */
+                .formLogin((auth) -> auth.loginPage("/login")
+                        .loginProcessingUrl("/loginProc")
+                        .permitAll()
+                );
+
+        // 개발 환경에서는 csrf를 disable해준다 login form 에 csrf token이 같이 서버로 전송되어야 하기 때문에 현재는 disabled 처리한다.
+        http
+                .csrf(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
