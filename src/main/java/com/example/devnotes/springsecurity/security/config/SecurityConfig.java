@@ -27,7 +27,8 @@ public class SecurityConfig {
                  * 위에서 정의한 매치에 해당하지 않은 모든 요청을 의미하며 이 요청에 대해서는 인증된 사용자만 접근이 가능하다.
                  */
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/loginProc").permitAll()
+                        .requestMatchers("/", "/login", "/loginProc", "/users").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()  // H2 콘솔 접근 허용
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
@@ -48,7 +49,15 @@ public class SecurityConfig {
 
         // 개발 환경에서는 csrf를 disable해준다 login form 에 csrf token이 같이 서버로 전송되어야 하기 때문에 현재는 disabled 처리한다.
         http
-                .csrf(AbstractHttpConfigurer::disable);
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/h2-console/**")  // H2 콘솔은 CSRF 검사에서 제외
+                        .disable()
+                );
+
+        http
+                .headers(headers -> headers
+                        .frameOptions(frameOption -> frameOption.disable())
+                );
 
         return http.build();
     }
