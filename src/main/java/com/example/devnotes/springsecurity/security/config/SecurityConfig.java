@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -27,9 +26,10 @@ public class SecurityConfig {
                  * 위에서 정의한 매치에 해당하지 않은 모든 요청을 의미하며 이 요청에 대해서는 인증된 사용자만 접근이 가능하다.
                  */
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/loginProc", "/users").permitAll()
+                        .requestMatchers("/", "/login", "/loginProc", "/users", "/profile").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()  // H2 콘솔 접근 허용
                         .requestMatchers("/admin").hasRole("ADMIN")
+                        .requestMatchers("/profile/**").authenticated()
                         .requestMatchers("/my/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated()
                 );
