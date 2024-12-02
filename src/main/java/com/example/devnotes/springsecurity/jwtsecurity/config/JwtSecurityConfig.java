@@ -1,7 +1,10 @@
 package com.example.devnotes.springsecurity.jwtsecurity.config;
 
+import com.example.devnotes.springsecurity.jwtsecurity.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -9,14 +12,26 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class JwtSecurityConfig {
 
+    private final AuthenticationConfiguration authenticationConfiguration;
+
+    public JwtSecurityConfig(AuthenticationConfiguration authenticationConfiguration) {
+        this.authenticationConfiguration = authenticationConfiguration;
+    }
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
     }
 
     @Bean
@@ -44,10 +59,12 @@ public class JwtSecurityConfig {
                 .formLogin((auth) -> auth.disable()) // Form 로그인 방식 disable
                 .httpBasic((auth) -> auth.disable()) // http basic 인증 방식 disable
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/login", "/jwt/users", "/jwt/main").permitAll() // 공개 URL
+                        .requestMatchers("/", "/jwt/login", "/jwt/users", "/jwt/main").permitAll() // 공개 URL
                         .requestMatchers("/admin").hasRole("ADMIN") // 관리자 전용
                         .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 )
+                //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // 세션 미사용
 
