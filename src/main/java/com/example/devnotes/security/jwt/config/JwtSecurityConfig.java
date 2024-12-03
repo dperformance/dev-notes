@@ -66,7 +66,7 @@ public class JwtSecurityConfig {
                 .httpBasic((auth) -> auth.disable()) // http basic 인증 방식 disable
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/jwt/login", "/jwt/users", "/jwt/main").permitAll() // 공개 URL
-                        .requestMatchers("/admin").hasRole("ADMIN") // 관리자 전용
+                        .requestMatchers("/jwt/admin").hasRole("ADMIN") // 관리자 전용
                         .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 )
                 .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class)
