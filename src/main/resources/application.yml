@@ -35,6 +35,9 @@ spring:
     servlet:
       expose-request-attributes: true
 
+  jwt:
+    secret: "vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb"
+
 
 decorator.datasource.p6spy.enable-logging: true     # false : Disable p6spy
 
