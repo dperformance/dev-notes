@@ -1,5 +1,6 @@
 package com.example.devnotes.security.jwt.config;
 
+import com.example.devnotes.security.jwt.filter.JwtFilter;
 import com.example.devnotes.security.jwt.jwt.LoginFilter;
 import com.example.devnotes.security.jwt.utils.JwtUtil;
 import org.springframework.context.annotation.Bean;
@@ -68,6 +69,7 @@ public class JwtSecurityConfig {
                         .requestMatchers("/admin").hasRole("ADMIN") // 관리자 전용
                         .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 )
+                .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class)
                 //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
                 .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement((session) -> session
