@@ -67,6 +67,7 @@ public class JwtSecurityConfig {
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/jwt/login", "/jwt/users", "/jwt/main").permitAll() // 공개 URL
                         .requestMatchers("/jwt/admin").hasRole("ADMIN") // 관리자 전용
+                        .requestMatchers("/jwt/reissue").permitAll()
                         .anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
                 )
                 .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class)
