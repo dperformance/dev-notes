@@ -40,9 +40,11 @@ public class TokenService {
         String username = jwtUtil.getUsername(refreshToken);
         String role = jwtUtil.getRole(refreshToken);
         String newAccessToken = jwtUtil.createJwt("access", username, role, 600000L);
+        String newRefresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
 
         // 4. 응답 헤더에 새로운 Access 토큰 설정
         response.setHeader("access", newAccessToken);
+        response.addCookie(createCookie(newRefresh));
 
         return new TokenResponseData("Access token refreshed successfully", "refresh");
     }
@@ -57,6 +59,16 @@ public class TokenService {
             }
         }
         return null;
+    }
+
+    private Cookie createCookie(String value) {
+        Cookie cookie = new Cookie("refresh", value);
+        cookie.setMaxAge(24*60*60);
+        //cookie.setSecure(true);
+        //cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+        return cookie;
     }
 }
 
