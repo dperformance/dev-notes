@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -85,19 +86,48 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     // 로그인 성공시 실행하는 메소드 (여기서 JWT를 발급하면 됨)
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        // UserDetails
-        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        /**
+         * 일반 jwt 로그인시 로직
+         */
+//        // UserDetails
+//        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+//
+//        String username = customUserDetails.getUsername();
+//
+//        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+//        Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
+//        GrantedAuthority auth = iterator.next();
+//
+//        String role = auth.getAuthority();
+//        String jwtToken = jwtUtil.createJwt(username, role, 60 * 60 * 10L);
+//
+//        response.addHeader("Authorization", "Bearer " + jwtToken);
 
-        String username = customUserDetails.getUsername();
+        /**
+         * Access, Refresh Token 을 발급하는 로직 (JWT 심화)
+         */
+        String username = authentication.getName();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         Iterator<? extends GrantedAuthority> iterator = authorities.iterator();
         GrantedAuthority auth = iterator.next();
-
         String role = auth.getAuthority();
-        String jwtToken = jwtUtil.createJwt(username, role, 60 * 60 * 10L);
 
-        response.addHeader("Authorization", "Bearer " + jwtToken);
+        String access = jwtUtil.createJwt("access", username, role, 600000L);
+        String refresh = jwtUtil.createJwt("refresh",username,role,86400000L);
+
+        response.setHeader("access",access);
+        response.addCookie(createCookie("refresh", refresh));
+    }
+
+    private Cookie createCookie(String key, String value) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(25*60*60);
+//        cookie.setSecure(true);
+//        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+
+        return cookie;
     }
 
     // 로그인 실패시 실행하는 메소드
