@@ -2,6 +2,7 @@ package com.example.devnotes.security.jwt.config;
 
 import com.example.devnotes.security.jwt.filter.JwtFilter;
 import com.example.devnotes.security.jwt.jwt.LoginFilter;
+import com.example.devnotes.security.jwt.repository.RefreshRepository;
 import com.example.devnotes.security.jwt.utils.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,10 +25,14 @@ public class JwtSecurityConfig {
 
     private final JwtUtil jwtUtil;
 
+    private final RefreshRepository refreshRepository;
+
     public JwtSecurityConfig(AuthenticationConfiguration authenticationConfiguration,
-                             JwtUtil jwtUtil) {
+                             JwtUtil jwtUtil,
+                             RefreshRepository refreshRepository) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.jwtUtil = jwtUtil;
+        this.refreshRepository = refreshRepository;
     }
 
     @Bean
@@ -72,7 +77,7 @@ public class JwtSecurityConfig {
                 )
                 .addFilterBefore(new JwtFilter(jwtUtil), LoginFilter.class)
                 //필터 추가 LoginFilter()는 인자를 받음 (AuthenticationManager() 메소드에 authenticationConfiguration 객체를 넣어야 함) 따라서 등록 필요
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil, refreshRepository), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // 세션 미사용
 

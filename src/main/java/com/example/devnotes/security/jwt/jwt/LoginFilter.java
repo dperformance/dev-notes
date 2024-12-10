@@ -1,7 +1,8 @@
 package com.example.devnotes.security.jwt.jwt;
 
-import com.example.devnotes.security.basic.dto.CustomUserDetails;
 import com.example.devnotes.security.basic.exception.LoginFailException;
+import com.example.devnotes.security.jwt.exception.RefreshEntity;
+import com.example.devnotes.security.jwt.repository.RefreshRepository;
 import com.example.devnotes.security.jwt.utils.JwtUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -29,10 +31,14 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     private final JwtUtil jwtUtil;
 
+    private final RefreshRepository refreshRepository;
+
     public LoginFilter(AuthenticationManager authenticationManager,
-                       JwtUtil jwtUtil) {
+                       JwtUtil jwtUtil,
+                       RefreshRepository refreshRepository) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
+        this.refreshRepository = refreshRepository;
 
         /**
          * LoginFilter는 UsernamePasswordAuthenticationFilter를 상속받았기 때문에, 기본적으로 /login POST 요청을 처리한다.
@@ -116,8 +122,23 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String access = jwtUtil.createJwt("access", username, role, 600000L);
         String refresh = jwtUtil.createJwt("refresh",username,role,86400000L);
 
+        // Refresh 토큰 저장
+        addRefreshEntity(username, refresh, 86400000L);
+
         response.setHeader("access",access);
         response.addCookie(createCookie("refresh", refresh));
+    }
+
+    private void addRefreshEntity(String username, String refresh, long expiredMs) {
+        Date date = new Date(System.currentTimeMillis() + expiredMs);
+
+        RefreshEntity refreshEntity = RefreshEntity.builder()
+                .username(username)
+                .refresh(refresh)
+                .expiration(date.toString())
+                .build();
+
+        refreshRepository.save(refreshEntity);
     }
 
     private Cookie createCookie(String key, String value) {

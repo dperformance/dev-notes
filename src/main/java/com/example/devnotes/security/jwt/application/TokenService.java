@@ -1,20 +1,30 @@
 package com.example.devnotes.security.jwt.application;
 
 import com.example.devnotes.security.jwt.dto.TokenResponseData;
+import com.example.devnotes.security.jwt.exception.RefreshEntity;
 import com.example.devnotes.security.jwt.exception.TokenException;
+import com.example.devnotes.security.jwt.repository.RefreshRepository;
 import com.example.devnotes.security.jwt.utils.JwtUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
-@RequiredArgsConstructor
 public class TokenService {
 
     private final JwtUtil jwtUtil;
+
+    private final RefreshRepository refreshRepository;
+
+    public TokenService(JwtUtil jwtUtil,
+                        RefreshRepository refreshRepository) {
+        this.jwtUtil = jwtUtil;
+        this.refreshRepository = refreshRepository;
+    }
 
     public TokenResponseData refreshAccessToken(HttpServletRequest request,
                                                 HttpServletResponse response) {
@@ -36,11 +46,21 @@ public class TokenService {
             throw new TokenException("Refresh token expired");
         }
 
+        // (추가됨) DB에 Refresh Token이 저장되어 있는지 확인
+        Boolean isExist = refreshRepository.existsByRefresh(refreshToken);
+        if (!isExist) {
+            throw new TokenException("Invalid Refresh Token");
+        }
+
         // 3. 새로운 Access 토큰 생성
         String username = jwtUtil.getUsername(refreshToken);
         String role = jwtUtil.getRole(refreshToken);
         String newAccessToken = jwtUtil.createJwt("access", username, role, 600000L);
         String newRefresh = jwtUtil.createJwt("refresh", username, role, 86400000L);
+
+        // (추가됨) 새로운 Refresh Token 교체
+        refreshRepository.deleteByRefresh(newRefresh);
+        addRefreshEntity(username, newRefresh, 86400000L);
 
         // 4. 응답 헤더에 새로운 Access 토큰 설정
         response.setHeader("access", newAccessToken);
@@ -69,6 +89,18 @@ public class TokenService {
         cookie.setHttpOnly(true);
 
         return cookie;
+    }
+
+    private void addRefreshEntity(String username, String refresh, Long expiredMs) {
+
+        Date date = new Date(System.currentTimeMillis() + expiredMs);
+
+        RefreshEntity refreshEntity = new RefreshEntity();
+        refreshEntity.setUsername(username);
+        refreshEntity.setRefresh(refresh);
+        refreshEntity.setExpiration(date.toString());
+
+        refreshRepository.save(refreshEntity);
     }
 }
 

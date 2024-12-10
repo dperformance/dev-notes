@@ -1,4 +1,4 @@
-package com.example.devnotes.security.jwt.repository;
+package com.example.devnotes.security.jwt.exception;
 
 import com.example.devnotes.global.error.exception.ErrorCode;
 import com.example.devnotes.global.error.exception.InvalidValueException;

@@ -3,7 +3,7 @@ package com.example.devnotes.security.jwt.application;
 import com.example.devnotes.security.basic.entity.User;
 import com.example.devnotes.security.basic.repository.UserRepository;
 import com.example.devnotes.security.jwt.dto.JwtRegisterRequestData;
-import com.example.devnotes.security.jwt.repository.UsernameDuplicateException;
+import com.example.devnotes.security.jwt.exception.UsernameDuplicateException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
