@@ -1,4 +1,4 @@
-package com.example.devnotes.security.jwt.jwt;
+package com.example.devnotes.security.jwt.filter;
 
 import com.example.devnotes.security.basic.exception.LoginFailException;
 import com.example.devnotes.security.jwt.exception.RefreshEntity;
