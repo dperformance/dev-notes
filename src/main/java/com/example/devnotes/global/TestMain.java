@@ -33,5 +33,12 @@ public class TestMain {
         // [01033185023, 01027416931, 01033373659, 01061360713]
         // [01033185023, 01027416931, 01033373659, 01061360713]
         System.out.println(receiverList);
+
+
+        String auth = "ROLE_ECO_BDM";
+
+        System.out.println(auth.contains("ROLE_ECO_BDM"));
+
+        
     }
 }

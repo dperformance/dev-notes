@@ -38,6 +38,24 @@ spring:
   jwt:
     secret: "vmfhaltmskdlstkfkdgodyroqkfwkdbalroqkfwkdbalaaaaaaaaaaaaaaaabbbbb"
 
+  security:
+    oauth2:
+      client:
+        registration:
+          naver:
+            client-name:
+            client-id:
+            client-secret:
+            redirect-uri:
+            authorization-grant-type:
+            scope:
+        provider:
+          naver:
+            authorization-uri:
+            token-uri:
+            user-info-uri:
+            user-name-attribute:
+
 
 decorator.datasource.p6spy.enable-logging: true     # false : Disable p6spy
 
