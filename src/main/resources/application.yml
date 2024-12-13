@@ -46,9 +46,16 @@ spring:
             client-name: naver
             client-id: v8r1D6e8mM8LJChUYRhg
             client-secret: OLM41aFdGF
-            redirect-uri: http://localhost:8080/login/oauth2/code/naver
+            redirect-uri: http://localhost:8888/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             scope: name,email
+          google:
+            client-name: google
+            client-id: 54937236267-85apu2ukn7ks1kfeq1iiu8n0t950rqdb.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: http://localhost:8888/login/oauth2/code/google
+            authorization-grant-type: authorization_code
+            scope: profile,email
         provider:
           naver:
             authorization-uri: https://nid.naver.com/oauth2.0/authorize
