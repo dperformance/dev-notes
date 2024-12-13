@@ -1,5 +1,6 @@
 package com.example.devnotes.security.oauth2.application;
 
+import com.example.devnotes.security.oauth2.dto.CustomOAuth2User;
 import com.example.devnotes.security.oauth2.dto.GoogleResponseData;
 import com.example.devnotes.security.oauth2.dto.NaverResponseData;
 import com.example.devnotes.security.oauth2.dto.OAuth2ResponseData;
@@ -29,5 +30,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             return null;
         }
 
+        String role = "ROLE_USER";
+        return new CustomOAuth2User(responseData, role);
     }
 }
