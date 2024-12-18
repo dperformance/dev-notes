@@ -52,11 +52,13 @@ public class OAuthSecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
 //                .oauth2Login(Customizer.withDefaults());
                 .oauth2Login((oauth) -> oauth
+                        .loginPage("/oauth/new/login")
                         .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
-                                .userService(customOAuth2UserService)));
+                                .userService(customOAuth2UserService))
+                        .defaultSuccessUrl("/oauth", true)); // GET 방식으로 리다이렉트를 수행
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/oauth2/**", "/oauth/login/**").permitAll()
+                        .requestMatchers("/", "/oauth2/**", "/oauth/login/**", "/oauth/**").permitAll()
                         .anyRequest().authenticated());
 
         return http.build();
