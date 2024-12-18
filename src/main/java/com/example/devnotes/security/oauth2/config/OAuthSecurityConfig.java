@@ -1,6 +1,7 @@
 package com.example.devnotes.security.oauth2.config;
 
 import com.example.devnotes.security.oauth2.application.CustomOAuth2UserService;
+import com.example.devnotes.security.oauth2.oauth2.CustomClientRegistrationRepo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,8 +17,12 @@ public class OAuthSecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
 
-    public OAuthSecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+    private final CustomClientRegistrationRepo customClientRegistrationRepo;
+
+    public OAuthSecurityConfig(CustomOAuth2UserService customOAuth2UserService,
+                               CustomClientRegistrationRepo customClientRegistrationRepo) {
         this.customOAuth2UserService = customOAuth2UserService;
+        this.customClientRegistrationRepo = customClientRegistrationRepo;
     }
 
     @Bean
@@ -53,6 +58,7 @@ public class OAuthSecurityConfig {
 //                .oauth2Login(Customizer.withDefaults());
                 .oauth2Login((oauth) -> oauth
                         .loginPage("/oauth/new/login")
+                        .clientRegistrationRepository(customClientRegistrationRepo.clientRegistrationRepository())
                         .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))
                         .defaultSuccessUrl("/oauth", true)); // GET 방식으로 리다이렉트를 수행
