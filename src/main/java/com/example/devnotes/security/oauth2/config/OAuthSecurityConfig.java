@@ -2,8 +2,10 @@ package com.example.devnotes.security.oauth2.config;
 
 import com.example.devnotes.security.oauth2.application.CustomOAuth2UserService;
 import com.example.devnotes.security.oauth2.oauth2.CustomClientRegistrationRepo;
+import com.example.devnotes.security.oauth2.oauth2.CustomOAuth2AuthorizedClientService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,10 +21,18 @@ public class OAuthSecurityConfig {
 
     private final CustomClientRegistrationRepo customClientRegistrationRepo;
 
+    private final CustomOAuth2AuthorizedClientService customOAuth2AuthorizedClientService;
+
+    private final JdbcTemplate jdbcTemplate;
+
     public OAuthSecurityConfig(CustomOAuth2UserService customOAuth2UserService,
-                               CustomClientRegistrationRepo customClientRegistrationRepo) {
+                               CustomClientRegistrationRepo customClientRegistrationRepo,
+                               CustomOAuth2AuthorizedClientService customOAuth2AuthorizedClientService,
+                               JdbcTemplate jdbcTemplate) {
         this.customOAuth2UserService = customOAuth2UserService;
         this.customClientRegistrationRepo = customClientRegistrationRepo;
+        this.customOAuth2AuthorizedClientService = customOAuth2AuthorizedClientService;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Bean
@@ -59,6 +69,9 @@ public class OAuthSecurityConfig {
                 .oauth2Login((oauth) -> oauth
                         .loginPage("/oauth/new/login")
                         .clientRegistrationRepository(customClientRegistrationRepo.clientRegistrationRepository())
+                        .authorizedClientService(customOAuth2AuthorizedClientService.oAuth2AuthorizedClientService(
+                                jdbcTemplate, customClientRegistrationRepo.clientRegistrationRepository())
+                        )
                         .userInfoEndpoint((userInfoEndpointConfig) -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))
                         .defaultSuccessUrl("/oauth", true)); // GET 방식으로 리다이렉트를 수행

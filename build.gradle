@@ -53,6 +53,8 @@ dependencies {
 	// OAuth2.0
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
+	// OAuth2AuthorizedClientService 에서 DB 저장하기 위해 JDBC를 사용
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
 }
 
