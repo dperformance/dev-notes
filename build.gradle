@@ -47,7 +47,7 @@ dependencies {
 	implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
 	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
 
-	// OAuth2.0
+	// OAuth2.0 (기본적으로 security 의존성을 포함하고 있기 때문에 security를 사용하지 않을경우에는 이것도 같이 의존성에서 제외시켜준다)
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
 	// OAuth2AuthorizedClientService 에서 DB 저장하기 위해 JDBC를 사용
