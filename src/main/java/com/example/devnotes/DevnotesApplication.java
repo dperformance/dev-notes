@@ -1,13 +1,10 @@
 package com.example.devnotes;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
+//@SpringBootApplication
 public class DevnotesApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DevnotesApplication.class, args);
-	}
+//	public static void main(String[] args) {
+//		SpringApplication.run(DevnotesApplication.class, args);
+//	}
 
 }
