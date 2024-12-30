@@ -1,8 +1,10 @@
 package com.example.devnotes.tobyspringboot;
 
-public class HelloController {
+import java.util.Objects;
 
+public class HelloController {
     public String hello(String name) {
-        return "hello " + name;
+        SimpleHelloService helloService = new SimpleHelloService();
+        return helloService.sayHello(Objects.requireNonNull(name));
     }
 }
