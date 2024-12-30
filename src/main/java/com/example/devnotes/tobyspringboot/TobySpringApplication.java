@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
-import org.springframework.http.HttpHeaders;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,10 +16,16 @@ import java.io.IOException;
 public class TobySpringApplication {
 
     public static void main(String[] args) {
+        // 가장 기본적인 스프링 컨테이너 생성, 빈 수동 등록이 가능하다.
+        // 1. 수동 등록 컨테이너 생성
+        GenericApplicationContext applicationContext = new GenericApplicationContext();
+        // 2. 빈 등록
+        applicationContext.registerBean(HelloController.class);
+        // 3. 컨테이너 초기화
+        applicationContext.refresh();
+
         TomcatServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
         WebServer webServer = serverFactory.getWebServer(servletContext -> {
-            HelloController helloController = new HelloController();
-
             servletContext.addServlet("frontcontroller",new HttpServlet() {
                 @Override
                 protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,13 +33,12 @@ public class TobySpringApplication {
                     if (req.getRequestURI().equals("/hello") && req.getMethod().equals(HttpMethod.GET.name())) {
                         String name = req.getParameter("name");
 
+                        // 4. 빈 사용
+                        HelloController helloController = applicationContext.getBean(HelloController.class);
                         String result = helloController.hello(name); // 매핑
 
-                        resp.setStatus(HttpStatus.OK.value());
-                        resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+                        resp.setContentType(MediaType.TEXT_PLAIN_VALUE);
                         resp.getWriter().println(result); // 바인딩
-                    } else if (req.getRequestURI().equals("/user")) {
-
                     } else {
                         resp.setStatus(HttpStatus.NOT_FOUND.value());
                     }
