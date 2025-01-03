@@ -21,6 +21,7 @@ public class TobySpringApplication {
         GenericApplicationContext applicationContext = new GenericApplicationContext();
         // 2. 빈 등록
         applicationContext.registerBean(HelloController.class);
+        applicationContext.registerBean(SimpleHelloService.class);
         // 3. 컨테이너 초기화
         applicationContext.refresh();
 
