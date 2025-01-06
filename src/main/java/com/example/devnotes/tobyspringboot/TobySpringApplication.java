@@ -2,6 +2,7 @@ package com.example.devnotes.tobyspringboot;
 
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.web.context.support.GenericWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -17,7 +18,7 @@ public class TobySpringApplication {
         // 3. 컨테이너 초기화
         applicationContext.refresh();
 
-        TomcatServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
+        ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
         WebServer webServer = serverFactory.getWebServer(servletContext -> {
             servletContext.addServlet("dispatcherServlet",
                     new DispatcherServlet(applicationContext)
