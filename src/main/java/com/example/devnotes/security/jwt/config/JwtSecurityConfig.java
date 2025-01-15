@@ -1,6 +1,3 @@
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.AuthenticationManager;//package com.example.devnotes.security.jwt.config;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 //
 //import com.example.devnotes.security.jwt.filter.CustomLogoutFilter;
 //import com.example.devnotes.security.jwt.filter.JwtFilter;

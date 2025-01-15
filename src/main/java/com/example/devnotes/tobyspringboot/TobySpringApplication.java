@@ -11,19 +11,44 @@ public class TobySpringApplication {
     public static void main(String[] args) {
         // 가장 기본적인 스프링 컨테이너 생성, 빈 수동 등록이 가능하다.
         // 1. 수동 등록 컨테이너 생성
-        GenericWebApplicationContext applicationContext = new GenericWebApplicationContext();
+        GenericWebApplicationContext applicationContext = new GenericWebApplicationContext(){
+            @Override
+            protected void onRefresh() {
+                super.onRefresh();
+                ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
+                WebServer webServer = serverFactory.getWebServer(servletContext ->
+                        servletContext.addServlet("dispatcherServlet",
+                                        new DispatcherServlet(this))
+                                .addMapping("/*"));
+                webServer.start();
+            }
+        };
+
         // 2. 빈 등록
+        // 2.1. 컨트롤러와 서비스 빈 등록
         applicationContext.registerBean(HelloController.class);
         applicationContext.registerBean(SimpleHelloService.class);
+
         // 3. 컨테이너 초기화
         applicationContext.refresh();
 
-        ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
-        WebServer webServer = serverFactory.getWebServer(servletContext -> {
-            servletContext.addServlet("dispatcherServlet",
-                    new DispatcherServlet(applicationContext)
-                    ).addMapping("/*");
-        });
+
+        /** */
+        // 가장 기본적인 스프링 컨테이너 생성, 빈 수동 등록이 가능하다.
+        // 1. 수동 등록 컨테이너 생성
+//        GenericWebApplicationContext applicationContext = new GenericWebApplicationContext();
+//        // 2. 빈 등록
+//        applicationContext.registerBean(HelloController.class);
+//        applicationContext.registerBean(SimpleHelloService.class);
+//        // 3. 컨테이너 초기화
+//        applicationContext.refresh();
+//        ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
+//        WebServer webServer = serverFactory.getWebServer(servletContext -> {
+//            servletContext.addServlet("dispatcherServlet",
+//                    new DispatcherServlet(applicationContext)
+//            ).addMapping("/*");
+//        });
+
 
         /** DispatcherServlet 으로 전환을 위해 아래 코드는 더 이상 사용하지 않음. */
 //        WebServer webServer = serverFactory.getWebServer(servletContext -> {
@@ -49,6 +74,6 @@ public class TobySpringApplication {
 //        });
 
 
-        webServer.start();
     }
 }
+
