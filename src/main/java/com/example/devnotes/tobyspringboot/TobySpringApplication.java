@@ -3,15 +3,28 @@ package com.example.devnotes.tobyspringboot;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
-import org.springframework.web.context.support.GenericWebApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
+@Configuration
 public class TobySpringApplication {
+
+    @Bean
+    public HelloController helloController(HelloService helloService) {
+        return new HelloController(helloService);
+    }
+
+    @Bean
+    public HelloService helloService() {
+        return new SimpleHelloService();
+    }
 
     public static void main(String[] args) {
         // 가장 기본적인 스프링 컨테이너 생성, 빈 수동 등록이 가능하다.
         // 1. 수동 등록 컨테이너 생성
-        GenericWebApplicationContext applicationContext = new GenericWebApplicationContext(){
+        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext(){
             @Override
             protected void onRefresh() {
                 super.onRefresh();
@@ -26,8 +39,7 @@ public class TobySpringApplication {
 
         // 2. 빈 등록
         // 2.1. 컨트롤러와 서비스 빈 등록
-        applicationContext.registerBean(HelloController.class);
-        applicationContext.registerBean(SimpleHelloService.class);
+        applicationContext.register(TobySpringApplication.class);
 
         // 3. 컨테이너 초기화
         applicationContext.refresh();
