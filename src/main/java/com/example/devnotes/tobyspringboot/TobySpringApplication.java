@@ -1,12 +1,11 @@
 package com.example.devnotes.tobyspringboot;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
 @Configuration
@@ -24,30 +23,32 @@ public class TobySpringApplication {
 
 
     public static void main(String[] args) {
+        SpringApplication.run(TobySpringApplication.class, args);
+    }
+
+        /** */
         // 가장 기본적인 스프링 컨테이너 생성, 빈 수동 등록이 가능하다.
         // 1. 수동 등록 컨테이너 생성
-        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext(){
-            @Override
-            protected void onRefresh() {
-                super.onRefresh();
-                ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class);
-                DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class);
-                dispatcherServlet.setApplicationContext(this);
-
-                WebServer webServer = serverFactory.getWebServer(servletContext ->
-                        servletContext.addServlet("dispatcherServlet", dispatcherServlet)
-                                .addMapping("/*"));
-                webServer.start();
-            }
-        };
-
-        // 2. 빈 등록
-        // 2.1. 컨트롤러와 서비스 빈 등록
-        applicationContext.register(TobySpringApplication.class);
-
-        // 3. 컨테이너 초기화
-        applicationContext.refresh();
-
+//        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext(){
+//            @Override
+//            protected void onRefresh() {
+//                super.onRefresh();
+//                ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class);
+//                DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class);
+//                dispatcherServlet.setApplicationContext(this);
+//
+//                WebServer webServer = serverFactory.getWebServer(servletContext ->
+//                        servletContext.addServlet("dispatcherServlet", dispatcherServlet)
+//                                .addMapping("/*"));
+//                webServer.start();
+//            }
+//        };
+//
+//        // 2. 빈 등록
+//        // 2.1. 컨트롤러와 서비스 빈 등록
+//        applicationContext.register(TobySpringApplication.class);
+//        // 3. 컨테이너 초기화
+//        applicationContext.refresh();
 
 
         /** Bean 을 이용하여 분리 하기 전 설정 */
@@ -104,8 +105,5 @@ public class TobySpringApplication {
 //                }
 //            }).addMapping("/*");
 //        });
-
-
-    }
 }
 
