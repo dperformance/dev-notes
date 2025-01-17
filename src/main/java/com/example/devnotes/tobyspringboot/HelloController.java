@@ -1,12 +1,11 @@
 package com.example.devnotes.tobyspringboot;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
-@Controller
+@RestController
 @RequestMapping("/hello")
 public class HelloController {
 
@@ -16,8 +15,7 @@ public class HelloController {
         this.helloService = helloService;
     }
 
-    @GetMapping()
-    @ResponseBody
+    @GetMapping
     public String hello(String name) {
         return helloService.sayHello(Objects.requireNonNull(name));
     }
