@@ -3,6 +3,7 @@ package com.example.devnotes.tobyspringboot;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.WebServer;
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -11,6 +12,16 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Configuration
 @ComponentScan
 public class TobySpringApplication {
+    @Bean
+    public ServletWebServerFactory servletWebServerFactory() {
+        return new TomcatServletWebServerFactory();
+    }
+
+    @Bean
+    public DispatcherServlet dispatcherServlet() {
+        return new DispatcherServlet();
+    }
+
 
     public static void main(String[] args) {
         // 가장 기본적인 스프링 컨테이너 생성, 빈 수동 등록이 가능하다.
@@ -19,10 +30,12 @@ public class TobySpringApplication {
             @Override
             protected void onRefresh() {
                 super.onRefresh();
-                ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
+                ServletWebServerFactory serverFactory = this.getBean(ServletWebServerFactory.class);
+                DispatcherServlet dispatcherServlet = this.getBean(DispatcherServlet.class);
+                dispatcherServlet.setApplicationContext(this);
+
                 WebServer webServer = serverFactory.getWebServer(servletContext ->
-                        servletContext.addServlet("dispatcherServlet",
-                                        new DispatcherServlet(this))
+                        servletContext.addServlet("dispatcherServlet", dispatcherServlet)
                                 .addMapping("/*"));
                 webServer.start();
             }
@@ -34,6 +47,22 @@ public class TobySpringApplication {
 
         // 3. 컨테이너 초기화
         applicationContext.refresh();
+
+
+
+        /** Bean 을 이용하여 분리 하기 전 설정 */
+//        AnnotationConfigWebApplicationContext applicationContext = new AnnotationConfigWebApplicationContext(){
+//            @Override
+//            protected void onRefresh() {
+//                super.onRefresh();
+//                ServletWebServerFactory serverFactory = new TomcatServletWebServerFactory();
+//                WebServer webServer = serverFactory.getWebServer(servletContext ->
+//                        servletContext.addServlet("dispatcherServlet",
+//                                        new DispatcherServlet(this))
+//                                .addMapping("/*"));
+//                webServer.start();
+//            }
+//        };
 
 
         /** */
