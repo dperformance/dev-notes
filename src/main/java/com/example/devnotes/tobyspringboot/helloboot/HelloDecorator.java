@@ -1,4 +1,4 @@
-package com.example.devnotes.tobyspringboot;
+package com.example.devnotes.tobyspringboot.helloboot;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;

@@ -1,10 +1,11 @@
-package com.example.devnotes.tobyspringboot;
+package com.example.devnotes.tobyspringboot.helloboot;
 
+import com.example.devnotes.tobyspringboot.config.MySpringBootApplication;
 import org.springframework.boot.SpringApplication;
 
 //@Configuration  // MySpringBootAnnotation 이동
 //@ComponentScan  // MySpringBootAnnotation 이동
-@MySpringBootAnnotation
+@MySpringBootApplication
 public class TobySpringApplication {
 
     /** Config 로 이동 */
