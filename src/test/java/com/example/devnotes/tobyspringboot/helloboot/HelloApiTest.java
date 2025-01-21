@@ -1,4 +1,4 @@
-package com.example.devnotes.tobyspringboot;
+package com.example.devnotes.tobyspringboot.helloboot;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

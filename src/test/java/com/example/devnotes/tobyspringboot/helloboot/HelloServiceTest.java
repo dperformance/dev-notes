@@ -1,7 +1,5 @@
-package com.example.devnotes.tobyspringboot;
+package com.example.devnotes.tobyspringboot.helloboot;
 
-import com.example.devnotes.tobyspringboot.helloboot.HelloDecorator;
-import com.example.devnotes.tobyspringboot.helloboot.SimpleHelloService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
