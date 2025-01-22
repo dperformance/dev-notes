@@ -1,2 +1,3 @@
 com.example.devnotes.tobyspringboot.config.autoconfig.DispatcherServletConfig
 com.example.devnotes.tobyspringboot.config.autoconfig.TomcatWebServerConfig
+com.example.devnotes.tobyspringboot.config.autoconfig.JettyWebServerConfig
