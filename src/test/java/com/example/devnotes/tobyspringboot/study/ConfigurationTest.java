@@ -51,7 +51,7 @@ public class ConfigurationTest {
         }
     }
 
-    @Configuration(proxyBeanMethods = false)
+    @Configuration(proxyBeanMethods = true)
     static class MyConfig {
         @Bean
         Common common() {
