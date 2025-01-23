@@ -24,11 +24,15 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation ('org.springframework.boot:spring-boot-starter-web') {
+		// 제외 시킬 패키지 모듈 추가
+//		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+	}
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	// Jetty
-	implementation 'org.springframework.boot:spring-boot-starter-jetty'
+//	implementation 'org.springframework.boot:spring-boot-starter-jetty'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-mustache'
