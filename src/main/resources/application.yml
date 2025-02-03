@@ -72,3 +72,4 @@ my:
   name: "ApplicationProperties"
 
 contextPath: "/app"
+port: 9090
