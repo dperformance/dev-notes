@@ -8,6 +8,15 @@ import org.springframework.boot.SpringApplication;
 @MySpringBootApplication
 public class TobySpringApplication {
 
+    /** */
+//    @Bean
+//    ApplicationRunner applicationRunner(Environment env) {
+//        return args -> {
+//            String name = env.getProperty("my.name");
+//            System.out.println("ma.name : " + name);
+//        };
+//    }
+
     /** Config 로 이동 */
 //    @Bean
 //    public ServletWebServerFactory servletWebServerFactory() {

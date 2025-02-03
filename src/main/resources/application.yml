@@ -66,3 +66,9 @@ spring:
 
 decorator.datasource.p6spy.enable-logging: true     # false : Disable p6spy
 
+
+#
+my:
+  name: "ApplicationProperties"
+
+contextPath: "/app"
