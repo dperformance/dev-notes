@@ -1,5 +1,6 @@
 server:
   port: 8888
+  contextPath: "/app"
 
   servlet:
     session:
@@ -71,6 +72,8 @@ decorator.datasource.p6spy.enable-logging: true     # false : Disable p6spy
 my:
   name: "ApplicationProperties"
 
-server2:
-  contextPath: "/app"
-  port: 9090
+data:
+  driver-class-name: org.h2.Driver
+  url: jdbc:h2:mem:~/data/testdb;AUTO_SERVER=TRUE
+  username: sa
+  password:

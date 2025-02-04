@@ -1,6 +1,6 @@
 package com.example.devnotes.tobyspringboot.config.autoconfig;
 
-@MyConfigurationProperties(prefix = "server2")
+@MyConfigurationProperties(prefix = "server")
 public class ServerProperties {
     private String contextPath;
 
