@@ -71,5 +71,6 @@ decorator.datasource.p6spy.enable-logging: true     # false : Disable p6spy
 my:
   name: "ApplicationProperties"
 
-contextPath: "/app"
-port: 9090
+server2:
+  contextPath: "/app"
+  port: 9090

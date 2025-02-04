@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 //@Conditional(TomcatWebServerConfig.TomcatCondition.class)
 @MyAutoConfiguration
 @ConditionalMyOnClass("org.apache.catalina.startup.Tomcat")
+@EnableMyConfigurationProperties(ServerProperties.class)
+//@Import(ServerProperties.class)
 public class TomcatWebServerConfig {
     /** 프로퍼티 클래스로 만든다. */
 //    @Value("${contextPath:}")

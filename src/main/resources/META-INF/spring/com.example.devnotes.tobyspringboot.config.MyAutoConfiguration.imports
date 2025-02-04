@@ -2,4 +2,4 @@ com.example.devnotes.tobyspringboot.config.autoconfig.DispatcherServletConfig
 com.example.devnotes.tobyspringboot.config.autoconfig.TomcatWebServerConfig
 com.example.devnotes.tobyspringboot.config.autoconfig.JettyWebServerConfig
 com.example.devnotes.tobyspringboot.config.autoconfig.PropertyPlaceholderConfig
-com.example.devnotes.tobyspringboot.config.autoconfig.ServerPropertiesConfig
+com.example.devnotes.tobyspringboot.config.autoconfig.PropertyPostProcessorConfig
