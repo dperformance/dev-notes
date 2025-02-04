@@ -17,7 +17,7 @@ class HelloApiTest {
         // http localhost:8080/hello?name=spring
         TestRestTemplate rest = new TestRestTemplate();
         ResponseEntity<String> res =
-                rest.getForEntity("http://localhost:9090/app/hello?name={name}", String.class, "Spring");
+                rest.getForEntity("http://localhost:8888/app/hello?name={name}", String.class, "Spring");
 
         // 응답 검증 3가지
         // status code 200
@@ -32,7 +32,7 @@ class HelloApiTest {
     void failsHelloApi() {
         TestRestTemplate rest = new TestRestTemplate();
         ResponseEntity<String> res =
-                rest.getForEntity("http://localhost:9090/app/hello?name=", String.class);
+                rest.getForEntity("http://localhost:8888/app/hello?name=", String.class);
 
         Assertions.assertThat(res.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
     }
