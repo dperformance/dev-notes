@@ -40,8 +40,6 @@ dependencies {
 	// Spring jdbc
 	implementation('org.springframework:spring-jdbc')
 
-	// hikari
-	implementation 'com.h2database:h2:2.2.220'
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-mustache'

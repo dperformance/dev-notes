@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class HelloControllerTest {
     @Test
     void helloController() {
-        HelloController helloController = new HelloController(name -> name);
+        HelloController helloController = new HelloController(helloServiceStub());
 
         String result = helloController.hello("Test");
 
@@ -15,7 +15,7 @@ public class HelloControllerTest {
 
     @Test
     void failsHelloController() {
-        HelloController helloController = new HelloController(name -> name);
+        HelloController helloController = new HelloController(helloServiceStub());
         Assertions.assertThatThrownBy(() -> {
             String result = helloController.hello(null);
         }).isInstanceOf(IllegalArgumentException.class);
@@ -23,5 +23,19 @@ public class HelloControllerTest {
         Assertions.assertThatThrownBy(() -> {
             String result = helloController.hello(" ");
         }).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    private static HelloService helloServiceStub() {
+        return new HelloService() {
+            @Override
+            public String sayHello(String name) {
+                return name;
+            }
+
+            @Override
+            public int countOf(String name) {
+                return 0;
+            }
+        };
     }
 }

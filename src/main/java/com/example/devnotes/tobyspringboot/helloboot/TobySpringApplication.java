@@ -1,12 +1,26 @@
 package com.example.devnotes.tobyspringboot.helloboot;
 
 import com.example.devnotes.tobyspringboot.config.MySpringBootApplication;
+import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 //@Configuration  // MySpringBootAnnotation 이동
 //@ComponentScan  // MySpringBootAnnotation 이동
 @MySpringBootApplication
 public class TobySpringApplication {
+
+    private final JdbcTemplate jdbcTemplate;
+
+    public TobySpringApplication(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    @PostConstruct
+    void init() {
+        jdbcTemplate.execute("create table if not exists hello(name varchar(50) primary key, count int)");
+    }
+
 
     /** */
 //    @Bean
