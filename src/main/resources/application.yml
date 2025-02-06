@@ -1,6 +1,5 @@
 server:
   port: 8888
-  contextPath: "/app"
 
   servlet:
     session:
@@ -9,6 +8,8 @@ server:
 spring:
   application:
     name: devnotes
+  autoconfigure: # Security Auto Configuration 은 무시하라는 설정
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
 
   output:
     ansi:

@@ -1,13 +1,14 @@
 package com.example.devnotes.tobyspringboot.helloboot;
 
-import com.example.devnotes.tobyspringboot.config.MySpringBootApplication;
 import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 //@Configuration  // MySpringBootAnnotation 이동
 //@ComponentScan  // MySpringBootAnnotation 이동
-@MySpringBootApplication
+//@MySpringBootApplication
+@SpringBootApplication
 public class TobySpringApplication {
 
     private final JdbcTemplate jdbcTemplate;

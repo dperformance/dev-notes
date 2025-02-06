@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @HellobootTest
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+//@Transactional
 public class HelloServiceCountTest {
     @Autowired HelloService helloService;
     @Autowired HelloRepository helloRepository;
